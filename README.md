@@ -116,7 +116,7 @@ You can configure the sleep time between messages by using the SLEEP_TIME enviro
 SLEEP_TIME=2 poetry run python main.py
 ```
 
-## 1. Code Overview
+## 5. Code Overview
 
 ### Main Files
 
