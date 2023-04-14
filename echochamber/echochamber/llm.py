@@ -1,9 +1,13 @@
-import time
-import tiktoken
+"""Logic for the LLM."""
+
 import os
+import time
+
 import openai
+import tiktoken
 
 TOKENIZER = tiktoken.get_encoding("cl100k_base")
+
 
 def exceeding_token_limit(total_usage: int, token_limit: int):
     """Returns True if the total_usage is greater than the token limit with some safe buffer."""
@@ -69,16 +73,17 @@ def reduce_tokens(messages: list, token_limit: int, total_usage: int):
     return messages, total_usage
 
 
-
 def get_user_answer(messages):
     """Returns the answer from OpenAI API."""
 
     while True:
         try:
-          answer = openai.ChatCompletion.create(
-              model='gpt-3.5-turbo-0301', messages=messages, temperature=1.2,
-          )
-          return answer
+            answer = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo-0301",
+                messages=messages,
+                temperature=1.2,
+            )
+            return answer
         except openai.error.InvalidRequestError as error:
             if "Please reduce the length of the messages" in str(error):
                 messages.pop(1)
