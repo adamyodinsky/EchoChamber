@@ -76,7 +76,7 @@ def get_user_answer(messages):
     while True:
         try:
           answer = openai.ChatCompletion.create(
-              model='gpt-3.5-turbo-0301', messages=messages
+              model='gpt-3.5-turbo-0301', messages=messages, temperature=1.2,
           )
           return answer
         except openai.error.InvalidRequestError as error:
