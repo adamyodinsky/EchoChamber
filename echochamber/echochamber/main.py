@@ -44,7 +44,7 @@ async def on_message(message):
   # Process commands before sending the message content back to the user
   await bot.process_commands(message)
 
-  sleep_time = float(os.environ.get('SLEEP_TIME')) or random.uniform(10, 20)
+  sleep_time = float(os.environ.get('SLEEP_TIME', random.uniform(10, 20)))
   time.sleep(sleep_time)
 
   async with message.channel.typing():
