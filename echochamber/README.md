@@ -52,7 +52,7 @@ The purpose of this project is to showcase the capabilities of AI language model
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/username/echochamber.git
+git clone https://github.com/adamyodinsky/EchoChamber.git
 ```
 
 2. Change into the project directory:
