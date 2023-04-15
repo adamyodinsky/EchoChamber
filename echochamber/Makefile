@@ -1,7 +1,7 @@
 .PHONY: run
 
 run:
-	SLEEP_TIME=2 PERSONALITY=interesting poetry run python echochamber/main.py
+	SLEEP_TIME=1.3 poetry run python echochamber/main.py
 
 run-emo:
 	PERSONALITY=emotional poetry run python echochamber/main.py

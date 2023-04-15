@@ -6,13 +6,13 @@ import time
 
 from discord import Intents
 from discord.ext import commands
-from echochamber.llm import (exceeding_token_limit, get_user_answer,
-                 num_tokens_from_messages, reduce_tokens)
-from echochamber.personalities import personalities_map
 
-messages = [
-    {"role": "system", "content": personalities_map[os.environ.get("PERSONALITY")]}
-]
+from echochamber.llm import (exceeding_token_limit, get_user_answer,
+                             num_tokens_from_messages, reduce_tokens)
+from echochamber.personalities import get_personality
+
+personality_type, personalities_msg = get_personality()
+messages = [{"role": "system", "content": personalities_msg}]
 
 intents = Intents.default()
 intents.typing = True
@@ -42,7 +42,11 @@ async def on_message(message):
     await bot.process_commands(message)
 
     sleep_time = float(os.environ.get("SLEEP_TIME", random.uniform(10, 20)))
-    time.sleep(sleep_time)
+
+    try:
+        time.sleep(sleep_time)
+    except Exception as error:
+        print(str(error))
 
     async with message.channel.typing():
         # Get the messages from the channel
@@ -69,11 +73,12 @@ async def on_message(message):
             print(str(error))
             await message.channel.send("I'm sorry, I can't say that.")
 
+
 # Event that prints the bot is ready when it starts up
 @bot.event
 async def on_ready():
-    """Event that prints the bot is ready when it starts up."""        
-    print(f"{bot.user} has connected to Discord!")
+    """Event that prints the bot is ready when it starts up."""
+    print(f"{bot.user} {personality_type} has connected to Discord!")
 
 
 # Run the bot with your token
