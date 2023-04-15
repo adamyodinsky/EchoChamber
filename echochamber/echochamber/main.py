@@ -3,9 +3,13 @@
 import os
 import random
 import time
+import asyncio
 
 from discord import Intents
+import discord
 from discord.ext import commands
+from gtts import gTTS
+from io import BytesIO
 
 from echochamber.llm import (exceeding_token_limit, get_user_answer,
                              num_tokens_from_messages, reduce_tokens)
@@ -64,11 +68,27 @@ async def on_message(message):
         try:
             # Get the answer from OpenAI API and append it to the messages list
             answer = get_user_answer(messages)
-            message.content = answer["choices"][0]["message"]["content"]
+            message_content = answer["choices"][0]["message"]["content"]
+            messages.append({"role": "assistant", "content": message_content})
+            
+            if message.content.startswith("/speak"):
+                # Generate text-to-speech audio
+                tts = gTTS(message_content)
+                # Save the audio as a file-like object
+                speech = BytesIO()
+                tts.write_to_fp(speech)
+                speech.seek(0)
 
-            # Send the message content back to the user
-            await message.channel.send(message.content)
-            messages.append({"role": "assistant", "content": message.content})
+                # Send the audio as a voice message
+                voice_channel = message.author.voice.channel
+                voice_client = await voice_channel.connect()
+                voice_client.play(discord.FFmpegPCMAudio(speech))
+                while voice_client.is_playing():
+                    await asyncio.sleep(1)
+                await voice_client.disconnect()
+            else:
+                # Send the message content back to the user
+                await message.channel.send(message_content)
         except Exception as error:
             print(str(error))
             await message.channel.send("I'm sorry, I can't say that.")
@@ -79,6 +99,25 @@ async def on_message(message):
 async def on_ready():
     """Event that prints the bot is ready when it starts up."""
     print(f"{bot.user} {personality_type} has connected to Discord!")
+
+
+# Event that joins voice channel
+@bot.command()
+async def join(ctx):
+    """Joins a voice channel."""
+    channel = ctx.author.voice.channel
+    await channel.connect()
+
+
+# Event that leaves voice channel
+@bot.command()
+async def leave(ctx):
+    """Leaves a voice channel."""
+    voice_client = ctx.guild.voice_client
+    if voice_client:
+        await voice_client.disconnect()
+    else:
+        await ctx.send("I am not currently in a voice channel.")
 
 
 # Run the bot with your token

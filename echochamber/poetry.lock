@@ -326,7 +326,7 @@ files = [
 name = "click"
 version = "8.1.3"
 description = "Composable command line interface toolkit"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -468,6 +468,26 @@ files = [
     {file = "frozenlist-1.3.3-cp39-cp39-win_amd64.whl", hash = "sha256:cfe33efc9cb900a4c46f91a5ceba26d6df370ffddd9ca386eb1d4f0ad97b9ea9"},
     {file = "frozenlist-1.3.3.tar.gz", hash = "sha256:58bcc55721e8a90b88332d6cd441261ebb22342e238296bb330968952fbb3a6a"},
 ]
+
+[[package]]
+name = "gtts"
+version = "2.3.1"
+description = "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "gTTS-2.3.1-py3-none-any.whl", hash = "sha256:7123ba91d415340f3264266adc195ff69f89b07f97ddafcfe48c9dad66f005c8"},
+    {file = "gTTS-2.3.1.tar.gz", hash = "sha256:fad26bccf0408aa8373ca8323f10731dc5b0c59eb5a0617591efe47ff30d4fcb"},
+]
+
+[package.dependencies]
+click = ">=7.1,<8.2"
+requests = ">=2.27,<3"
+
+[package.extras]
+docs = ["sphinx", "sphinx-autobuild", "sphinx-click", "sphinx-mdinclude", "sphinx-rtd-theme"]
+tests = ["pytest (>=7.1.3,<7.2.0)", "pytest-cov", "testfixtures"]
 
 [[package]]
 name = "idna"
@@ -1134,4 +1154,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "cc2f224e958c5569f8dc3c64d8a19acefcdde7bf5031a3f1c73369ab8a39c5d5"
+content-hash = "bab9ddbfd94e30a31b4e814715fe6a12d3e9a9519a49b0c5886ad0486070e348"
